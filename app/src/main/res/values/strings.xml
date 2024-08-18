@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Finance app</string>
+    <string name="login">Login\n</string>
+    <string name="sign_in_to_continue">SignIn to co Continue</string>
+    <string name="name">Name\n</string>
+    <string name="email">Email\n</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forget Password</string>
+    <string name="doesnt_have_acccount">Dosn\'t have Account</string>
+    <string name="sign_up">SignUp</string>
+    <string name="or_login_with">or Login with</string>
+    <string name="default_web_client_id">905659718738-6hakna9l4i8a8arusgjbqlofbffr4gng.apps.googleusercontent.com</string>
+    <string name="home">Home\n</string>
+    <string name="profile">Profile</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share\n</string>
+    <string name="rate_us">Rate Us\n</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date</string>
+    <string name="save">Save</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="description">Description</string>
+    <string name="already_have_an_account_login_here">Already have an account? Login here</string>
+    <string name="logout">Logout</string>
+    <string name="delete">Delete\n</string>
+</resources>

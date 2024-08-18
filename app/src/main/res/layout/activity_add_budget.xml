@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.AddBudgetActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarBudget"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_bg"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:title="Add Budget"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarBudget"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:padding="5dp">
+
+        <EditText
+            android:id="@+id/budgetAmountEditText"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:autofillHints="Amount"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/line_around_buttons"
+            android:hint="@string/amount"
+            android:inputType="numberDecimal" />
+
+        <Spinner
+            android:id="@+id/categorySpinnerBudget"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:padding="10dp"
+            android:spinnerMode="dropdown"
+            android:layout_margin="5dp"
+            android:background="@drawable/line_around_buttons" />
+
+        <EditText
+            android:id="@+id/startDateEditText"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:padding="10dp"
+            android:autofillHints="date"
+            android:inputType="date"
+            android:layout_margin="5dp"
+            android:background="@drawable/line_around_buttons"
+            android:hint="@string/date" />
+        <Button
+            android:id="@+id/saveBudgetButton"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_margin="5dp"
+            android:padding="10dp"
+            android:textSize="30sp"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/cardview_light_background"
+            android:text="@string/save" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

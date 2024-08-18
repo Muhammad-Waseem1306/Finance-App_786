@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Make button background transparent if needed -->
+    <solid android:color="@color/primaryColor" />
+
+    <!-- Set the shape to a circle -->
+    <corners android:radius="1000dp" /> <!-- Use a large value for radius to approximate a circle -->
+
+</shape>
