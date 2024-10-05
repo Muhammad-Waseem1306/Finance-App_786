@@ -58,9 +58,9 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/deleteButton"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_margin="16dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_margin="8dp"
                 android:contentDescription="Add Income or Expense"
                 android:src="@drawable/delete_icone24"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -1,15 +1,18 @@
 package com.example.financeapp.adapters
 
-
+import Budget
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financeapp.R
-import com.example.financeapp.models.Budget
 
-class BudgetAdapter(private val budgets: List<Budget>) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+class BudgetAdapter(
+    private val budgets: List<Budget>,
+) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_budget, parent, false)
@@ -22,11 +25,10 @@ class BudgetAdapter(private val budgets: List<Budget>) : RecyclerView.Adapter<Bu
         holder.categoryTextView.text = budget.category
         holder.startDateTextView.text = budget.startDate
         holder.endDateTextView.text = budget.endDate
+
     }
 
-    override fun getItemCount(): Int {
-        return budgets.size
-    }
+    override fun getItemCount(): Int = budgets.size
 
     class BudgetViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val amountTextView: TextView = itemView.findViewById(R.id.amountTextView)

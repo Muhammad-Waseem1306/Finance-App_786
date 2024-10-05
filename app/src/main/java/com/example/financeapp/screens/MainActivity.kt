@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
 
         // Show progress bar while loading data
         showProgressBar()
-
         // Clear previous data
         allExpenses.clear()
 
