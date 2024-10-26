@@ -9,6 +9,16 @@
         android:title="@string/home"
         android:icon="@drawable/home_icon"/>
 
+    <item android:title="@string/budget"
+        android:id="@+id/budget_nav"
+        android:icon="@drawable/budget_icone"/>
+    <item
+        android:title="@string/analysis"
+        android:id="@+id/chart_nav"
+        android:icon="@drawable/chart_icon"/>
+
+
+
     <item
         android:title="@string/profile">
 

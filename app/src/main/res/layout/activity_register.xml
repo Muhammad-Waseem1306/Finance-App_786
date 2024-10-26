@@ -1,90 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".screens.RegisterActivity">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient_bg"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:title="Regiser"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:layout_constraintTop_toTopOf="parent" />
+<ScrollView android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbarRegister"
-        tools:context=".RegisterActivity">
+        tools:context=".screens.RegisterActivity">
 
-        <EditText
-            android:id="@+id/emailEditText"
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_bg"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:title="Register"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Registration Image -->
+        <ImageView
+            android:id="@+id/image_register"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp142"
+            android:contentDescription="@string/register"
+            android:src="@drawable/register_pic"
+            android:layout_marginTop="@dimen/dp10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarRegister" />
+
+        <!-- Input Fields and Register Button -->
+        <LinearLayout
+            android:id="@+id/linearLayoutRegister"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="@string/email"
-            android:autofillHints=""
-            android:layout_margin="5dp"
-            android:padding="10dp"
-            android:background="@drawable/line_around_buttons"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="16dp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/dp1"
+            android:layout_margin="@dimen/dp2"
+            app:layout_constraintTop_toBottomOf="@id/image_register"
+            tools:context=".RegisterActivity">
 
-        <EditText
-            android:id="@+id/passwordEditText"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="@string/password"
-            android:autofillHints=""
-            android:layout_margin="5dp"
-            android:padding="10dp"
-            android:background="@drawable/line_around_buttons"
-            android:inputType="textPassword"
-            android:layout_marginTop="16dp" />
+            <!-- Email Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input1">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:hint="@string/email"
+                    android:autofillHints="emailAddress"
+                    android:inputType="textEmailAddress"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp10" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/rePasswordEditText"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:hint="@string/confirm_password"
-            android:autofillHints=""
-            android:layout_margin="5dp"
-            android:padding="10dp"
-            android:background="@drawable/line_around_buttons"
-            android:inputType="textPassword"
-            android:layout_marginTop="16dp" />
+            <!-- Password Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input2">
+                <EditText
+                    android:id="@+id/passwordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:hint="@string/password"
+                    android:autofillHints="password"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/registerButton"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_margin="5dp"
-            android:text="@string/register"
-            android:textSize="30sp"
-            android:textColor="@color/white"
-            android:backgroundTint="#acb6e5"/>
+            <!-- Confirm Password Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input3">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/rePasswordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:hint="@string/confirm_password"
+                    android:autofillHints="password"
+                    android:layout_margin="@dimen/dp5"
+                    android:padding="@dimen/dp10"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Register Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/registerButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp56"
+                android:layout_margin="@dimen/dp5"
+                app:cornerRadius="@dimen/dp10"
+                android:text="@string/register"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:backgroundTint="@color/primaryColor" />
+        </LinearLayout>
+
+        <!-- Login TextView -->
         <TextView
             android:id="@+id/loginHere"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
+            android:focusable="true"
             android:text="@string/already_have_an_account_login_here"
-            android:textColor="@color/black"
-            android:layout_marginTop="10dp"
+            android:textColor="@color/primaryColor"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/dp10"
             android:clickable="true"
-            android:layout_marginStart="10dp"
-            android:focusable="true" />
-
-    </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="@dimen/dp10"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayoutRegister" />
+        <ProgressBar
+            android:id="@+id/progressBarR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

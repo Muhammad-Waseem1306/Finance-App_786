@@ -1,10 +1,9 @@
 package com.example.financeapp.screens
 
 import Budget
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
@@ -14,16 +13,12 @@ class BudgetRepository {
     private var listenerRegistration: ListenerRegistration? = null
 
     // Adding a new budget with error handling
-    fun addBudget(budget: Budget) {
+    fun addBudget(budget: Budget): Task<Void> {
         val docRef = budgetsCollection.document() // Generate a new document reference
         budget.id = docRef.id // Set the generated ID in the Budget object
-        docRef.set(budget)
-            .addOnSuccessListener {
 
-            }
-            .addOnFailureListener { e ->
-                // Handle failure (e.g., show an error message or log it)
-            }
+        // Return the Task from the set operation so that the caller can handle success/failure
+        return docRef.set(budget)
     }
 
     // Fetch all budgets with real-time updates and error handling

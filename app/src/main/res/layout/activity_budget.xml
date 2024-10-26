@@ -1,29 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".screens.BudgetActivity">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".BudgetActivity">
+        tools:context=".screens.BudgetActivity">
 
-        <Button
+        <!-- Toolbar with a consistent layout width and proper margins -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarBudget"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_bg"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/toolbar_menu"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="Budget" />
+
+        <!-- Main LinearLayout for content, with padding and margins for spacing -->
+        <LinearLayout
+            android:id="@+id/budgetLinear"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:padding="@dimen/dp4"
+            app:layout_constraintBottom_toTopOf="@+id/addBudgetButton"
+            app:layout_constraintTop_toBottomOf="@id/toolbarBudget">
+
+            <!-- RecyclerView for displaying budget items -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/budgetsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:scrollbars="vertical" />
+
+            <!-- Centered ProgressBar for loading indication, initially hidden -->
+            <ProgressBar
+                android:id="@+id/progress_circular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <!-- Add Budget Button with MaterialButton for better styling -->
+
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/addBudgetButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Budget" />
+            android:layout_height="@dimen/dp56"
+            android:layout_margin="@dimen/dp4"
+            android:backgroundTint="@color/primaryColor"
+            android:text="@string/add"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp20"
+            app:cornerRadius="@dimen/dp10"
+            android:layout_marginTop="@dimen/dp22"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/budgetsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

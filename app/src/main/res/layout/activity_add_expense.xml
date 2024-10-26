@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -33,88 +34,126 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp"
-            android:layout_margin="5dp"
+            android:padding="@dimen/dp2"
+            android:layout_margin="@dimen/dp1"
             tools:context=".AddExpenseActivity">
 
-            <EditText
-                android:id="@+id/amountEditText"
+            <!-- Amount field with floating label -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:autofillHints="amount"
-                android:hint="@string/amount"
-                android:padding="10dp"
-                android:layout_margin="5dp"
-                android:background="@drawable/line_around_buttons"
-                android:inputType="numberDecimal" />
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:hint="@string/amount">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amountEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Spinner for category selection -->
             <Spinner
                 android:id="@+id/categorySpinner"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:padding="10dp"
+                android:layout_height="@dimen/dp64"
+                android:padding="@dimen/dp10"
                 android:spinnerMode="dropdown"
-                android:layout_margin="5dp"
-                android:background="@drawable/line_around_buttons" />
+                android:layout_margin="@dimen/dp5"
+                android:background="@color/cardview_light_background" />
 
-            <EditText
-                android:id="@+id/dateEditText"
+            <!-- Subcategory spinner that appears only when Expense is selected -->
+            <Spinner
+                android:id="@+id/expenseSubcategorySpinner"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:autofillHints="Date"
-                android:hint="@string/date"
-                android:layout_margin="5dp"
-                android:background="@drawable/line_around_buttons"
-                android:focusable="true"
-                android:inputType="date"
-                android:padding="10dp"
-                android:clickable="true" />
+                android:layout_height="@dimen/dp64"
+                android:visibility="gone"
+                android:padding="@dimen/dp10"
+                android:spinnerMode="dropdown"
+                android:layout_margin="@dimen/dp5"
+                android:background="@color/cardview_light_background" />
 
-
-            <EditText
-                android:id="@+id/descriptionEditText"
+            <!-- EditText for custom expense category -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/customCategoryLayout"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_margin="5dp"
-                android:autofillHints="description"
-                android:inputType="textLongMessage"
-                android:padding="10dp"
-                android:background="@drawable/line_around_buttons"
-                android:hint="@string/description" />
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:hint="@string/custom_category"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/customCategoryEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:inputType="text" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Date field with floating label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:hint="@string/date">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Description field with floating label -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dp5"
+                android:hint="@string/description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp64"
+                    android:inputType="textLongMessage" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- ProgressBar -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
 
-            <Button
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveExpenseButton"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_margin="5dp"
-                android:padding="10dp"
-                android:textSize="30sp"
+                android:layout_height="@dimen/dp56"
+                android:layout_margin="@dimen/dp5"
+                android:padding="@dimen/dp10"
+                android:textSize="@dimen/sp20"
+                app:cornerRadius="@dimen/dp10"
                 android:textColor="@color/black"
-                android:backgroundTint="@color/cardview_light_background"
+                android:backgroundTint="@color/primaryColor"
                 android:text="@string/save" />
 
             <!-- Delete button for updating existing expenses -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/deleteExpenseButton"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_margin="5dp"
-                android:padding="10dp"
-                android:textSize="30sp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/cardview_light_background"
+                android:layout_height="@dimen/dp56"
+                android:layout_margin="@dimen/dp5"
                 android:text="@string/delete"
-                android:visibility="gone" /> <!-- Initially hidden, show when updating -->
-
+                android:textSize="18sp"
+                android:padding="@dimen/dp10"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/primaryColor"
+                app:cornerRadius="@dimen/dp10" />
 
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

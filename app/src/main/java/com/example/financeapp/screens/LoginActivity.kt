@@ -1,4 +1,3 @@
-// LoginActivity.kt
 package com.example.financeapp.screens
 
 import android.content.Intent
@@ -14,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -24,14 +24,15 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var binding: ActivityLoginBinding
 
-//    override fun onStart() {
-//        super.onStart()
-//        val currentUser: FirebaseUser? = auth.currentUser
-//        if (currentUser != null) {
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finish()
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        // Check if user is already signed in
+        val currentUser: FirebaseUser? = auth.currentUser
+        if (currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +62,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Set up login button click listener
-        binding.loginButton.setOnClickListener {
+        val button = findViewById<MaterialButton>(R.id.login_button)
+        button.setOnClickListener {
             val email = binding.emailEdittext.text.toString().trim()
             val password = binding.passwordEdittext.text.toString().trim()
 
@@ -83,6 +85,11 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
         }
+
+        // Set up forgot password click listener
+        binding.forgotPasswordText.setOnClickListener {
+            resetPassword()
+        }
     }
 
     private val googleSignInLauncher = registerForActivityResult(
@@ -96,6 +103,8 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: ApiException) {
                 Toast.makeText(this, "Google sign-in failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(this, "Google sign-in canceled", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -106,16 +115,45 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount?) {
-        val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
+        if (account == null) {
+            Toast.makeText(this, "Google Sign-In failed: Account is null", Toast.LENGTH_SHORT).show()
+            hideProgressBar()
+            return
+        }
+
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 hideProgressBar()
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Google Sign-In Successful", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
-                    finish() // Ensures the back button does not return to the login screen
+                    finish()
                 } else {
                     Toast.makeText(this, "Google Sign-In Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                hideProgressBar()
+                Toast.makeText(this, "Authentication failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun resetPassword() {
+        val email = binding.emailEdittext.text.toString().trim()
+        if (email.isEmpty()) {
+            Toast.makeText(this, "Please enter your email address", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        showProgressBar()
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                hideProgressBar()
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Password reset email sent", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Error sending password reset email: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
