@@ -43,18 +43,18 @@ class ExpenseAdapter(private val expenses: List<Expense>) : RecyclerView.Adapter
                 amountTextView.setTextColor(Color.GREEN)
                 subCategoryTextView.visibility = View.GONE
                 customTextView.visibility = View.GONE
-            } else if (expense.category == "Expense") {
+            } else {
                 amountTextView.setTextColor(Color.RED)
-                subCategoryTextView.visibility = View.VISIBLE
-                subCategoryTextView.text = "SubCategory: ${expense.subcategory}"
+//                subCategoryTextView.visibility = View.VISIBLE
+//                subCategoryTextView.text = "SubCategory: ${expense.subcategory}"
 
                 // Handle custom subcategory visibility
-                if (expense.subcategory == "Other") {
-                    customTextView.visibility = View.VISIBLE
-                    customTextView.text = "Custom Category: ${expense.customText ?: "No custom category"}"
-                } else {
-                    customTextView.visibility = View.GONE
-                }
+//                if (expense.subcategory == "Other") {
+//                    customTextView.visibility = View.VISIBLE
+//                    customTextView.text = "Custom Category: ${expense.customText ?: "No custom category"}"
+//                } else {
+//                    customTextView.visibility = View.GONE
+//                }
             }
 
             // Set other fields

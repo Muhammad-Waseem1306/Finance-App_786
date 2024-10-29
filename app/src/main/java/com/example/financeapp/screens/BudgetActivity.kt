@@ -1,14 +1,23 @@
 package com.example.financeapp.screens
 
 import Budget
+import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -18,7 +27,6 @@ import com.example.financeapp.databinding.ActivityBudgetBinding
 import com.example.financeapp.models.Expense
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
 
 class BudgetActivity : AppCompatActivity() {
@@ -29,16 +37,18 @@ class BudgetActivity : AppCompatActivity() {
     private val allBudget = mutableListOf<Budget>()
     private lateinit var binding: ActivityBudgetBinding
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private var budgetToEdit: Budget? = null
-
-    private var spentAmount: Double = 0.0
-    private var remainingAmount: Double = 0.0
-    private var budgetLimit: Double = 0.0
+    // Notification Channel ID
+    private val CHANNEL_ID = "budget_notifications"
+    private val NOTIFICATION_ID = 101
+    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBudgetBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize notification channel
+        createNotificationChannel()
 
         // Initialize the RecyclerView
         recyclerView = binding.budgetsRecyclerView
@@ -88,8 +98,8 @@ class BudgetActivity : AppCompatActivity() {
                     }
                     allBudget.add(budget)
 
-                    // Ensure expenses are calculated for each budget
-                    listenForExpenses(budget.category, budget.date)
+                    // Calculate the spent amount for each budget item
+                    calculateSpentAmount(budget)
                 }
                 displayData()
             }
@@ -99,39 +109,49 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun displayData() {
         allBudget.sortByDescending { it.date }  // Sort by date for latest budgets
-        adapter = BudgetAdapter(this,allBudget, ::onBudgetClick, ::onBudgetUpdate, ::onBudgetDelete)
+        adapter = BudgetAdapter(this, allBudget, ::onBudgetClick, ::onBudgetUpdate, ::onBudgetDelete)
         recyclerView.adapter = adapter
     }
 
-    private fun listenForExpenses(category: String, date: String) {
+    private fun calculateSpentAmount(budget: Budget) {
         db.collection("expenses")
-            .whereEqualTo("category", category)
-            .whereGreaterThanOrEqualTo("date", date)
-            .addSnapshotListener { snapshot, e ->
-                if (e != null) {
-                    Toast.makeText(this, "Listen failed: ${e.message}", Toast.LENGTH_LONG).show()
-                    return@addSnapshotListener
+            .whereEqualTo("category", budget.category)
+            .whereGreaterThanOrEqualTo("date", budget.date)
+            .get()
+            .addOnSuccessListener { expenses ->
+                var spentAmount = 0.0
+                for (document in expenses) {
+                    val expense = document.toObject(Expense::class.java)
+                    spentAmount += expense.amount
                 }
 
-                // Calculate spent amount whenever expenses change
-                calculateSpentAmount(snapshot)
+                // Calculate remaining amount
+                val remainingAmount = budget.limit - spentAmount
+
+                // Update budget in Firestore
+                val updatedBudget = budget.copy(spent = spentAmount.toString(), remaining = remainingAmount.toString())
+                db.collection("budgets").document(budget.id).set(updatedBudget)
+                    .addOnSuccessListener {
+                        updateBudgetInList(updatedBudget)
+                        // Trigger notification if the remaining amount is negative (exceeded)
+                        if (remainingAmount < 0) {
+                            sendBudgetExceededNotification(budget)
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Failed to update budget: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to fetch expenses: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun calculateSpentAmount(expenses: QuerySnapshot?) {
-        spentAmount = 0.0
-        expenses?.documents?.forEach { document ->
-            val expense = document.toObject(Expense::class.java)
-            spentAmount += expense?.amount ?: 0.0
-        }
-
-        // Calculate remaining amount based on the selected budget
-        runOnUiThread {
-            budgetLimit = allBudget.sumOf { it.limit }
-            remainingAmount = budgetLimit - spentAmount
-
-            findViewById<TextView>(R.id.spentTextView).text = "Spent: $spentAmount"
-            findViewById<TextView>(R.id.remainingTextView).text = "Remaining: $remainingAmount"
+    private fun updateBudgetInList(updatedBudget: Budget) {
+        val index = allBudget.indexOfFirst { it.id == updatedBudget.id }
+        if (index >= 0) {
+            allBudget[index] = updatedBudget
+            adapter.notifyItemChanged(index)
         }
     }
 
@@ -160,6 +180,10 @@ class BudgetActivity : AppCompatActivity() {
             }
             R.id.nav_login -> {
                 startActivity(Intent(this, LoginActivity::class.java))
+                true
+            }
+            R.id.chart_nav->{
+                startActivity(Intent(this,GraphicallyData::class.java))
                 true
             }
             R.id.nav_share -> {
@@ -250,5 +274,49 @@ class BudgetActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error loading data: ${e.message}", Toast.LENGTH_LONG).show()
                 hideProgressBar()
             }
+    }
+
+    // Function to create a notification channel (for Android 8.0+)
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Budget Notifications"
+            val descriptionText = "Notifications for budget limit exceedance"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    // Function to send a notification when the budget is exceeded
+    private fun sendBudgetExceededNotification(budget: Budget) {
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.logo) // Replace with your app's icon
+            .setContentTitle("Budget Limit Exceeded")
+            .setContentText("Your budget for ${budget.category} has exceeded the limit.")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+
+        // Show the notification
+        with(NotificationManagerCompat.from(this@BudgetActivity)) {
+            if (ActivityCompat.checkSelfPermission(
+                    this@BudgetActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Request notification permission if it's not granted
+                ActivityCompat.requestPermissions(
+                    this@BudgetActivity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+                return
+            }
+            // Permission granted, show the notification
+            notify(NOTIFICATION_ID, notificationBuilder.build())
+        }
     }
 }

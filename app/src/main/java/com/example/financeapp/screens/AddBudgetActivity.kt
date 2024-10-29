@@ -80,8 +80,8 @@ class AddBudgetActivity : AppCompatActivity() {
         val amountText = findViewById<EditText>(R.id.budgetAmountEditText).text.toString()
         val category = findViewById<Spinner>(R.id.categorySpinnerBudget).selectedItem.toString()
         val startDate = findViewById<EditText>(R.id.startDateEditText).text.toString()
-        val spent = findViewById<TextView>(R.id.spentTextView).text.toString()
-        val remaining = findViewById<EditText>(R.id.remainingEtv).text.toString()
+//        val spent = findViewById<TextView>(R.id.spentTextView).text.toString()
+//        val remaining = findViewById<EditText>(R.id.remainingEtv).text.toString()
 
         if (amountText.isBlank() || startDate.isBlank()) {
             Toast.makeText(this, "All fields must be filled", Toast.LENGTH_SHORT).show()
@@ -96,8 +96,8 @@ class AddBudgetActivity : AppCompatActivity() {
                 limit = amount,
                 category = category,
                 date = startDate,
-                spent = spent,
-                remaining = remaining
+//                spent = spent,
+//                remaining = remaining
             )
             budgetRepository.updateBudget(updatedBudget)
         } else {
@@ -107,8 +107,8 @@ class AddBudgetActivity : AppCompatActivity() {
                 limit = amount,
                 category = category,
                 date = startDate,
-                spent = spent,
-                remaining = remaining
+//                spent = spent,
+//                remaining = remaining
             )
             budgetRepository.addBudget(newBudget)
         }

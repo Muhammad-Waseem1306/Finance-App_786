@@ -92,6 +92,7 @@
             android:layout_width="35dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:visibility="gone"
             android:layout_marginEnd="@dimen/dp4"
             android:layout_marginTop="@dimen/dp40"
             android:src="@drawable/baseline_add_24" />

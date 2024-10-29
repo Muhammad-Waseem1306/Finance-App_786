@@ -115,8 +115,8 @@ class MainActivity : AppCompatActivity() {
                                     putExtra("expenseId", expense.id)
                                     putExtra("amount", expense.amount)
                                     putExtra("category", expense.category)
-                                    putExtra("subCategory",expense.subcategory)
-                                    putExtra("customText",expense.customText)
+                                    putExtra("subCategory", expense.subcategory)
+                                    putExtra("customText", expense.customText)
                                     putExtra("date", expense.date)
                                     putExtra("description", expense.description)
                                 }
@@ -161,25 +161,25 @@ class MainActivity : AppCompatActivity() {
         val spentByCategory = mutableMapOf<String, Double>()  // Track spending per subcategory
 
         for (expense in allExpenses) {
-            when (expense.category) {
-                "Income" -> totalIncome += expense.amount
-                "Expense" -> {
-                    totalExpense += expense.amount
+            if (expense.category == "Income") {
+                totalIncome += expense.amount
+            } else {
+                totalExpense += expense.amount
 
-                    // Handle null subcategory by using a default value or skipping
-                    val subcategory = expense.subcategory ?: "Uncategorized"  // Use default if null
+                // Handle null subcategory by using a default value or skipping
+                val subcategory = expense.subcategory ?: "Uncategorized"  // Use default if null
 
-                    // Calculate spent by subcategory
-                    val currentSpent = spentByCategory[subcategory] ?: 0.0
-                    spentByCategory[subcategory] = currentSpent + expense.amount
-                }
+                // Calculate spent by subcategory
+                val currentSpent = spentByCategory[subcategory] ?: 0.0
+                spentByCategory[subcategory] = currentSpent + expense.amount
             }
         }
 
         // Update the UI with total income and total expense
         findViewById<TextView>(R.id.totalIncomeTextView).text = "+ Rs. $totalIncome"
         findViewById<TextView>(R.id.totalExpenseTextView).text = "- Rs. $totalExpense"
-        findViewById<TextView>(R.id.totalBalanceTextView).text = (totalIncome - totalExpense).toString()
+        findViewById<TextView>(R.id.totalBalanceTextView).text =
+            (totalIncome - totalExpense).toString()
 
         // Example: Log spent amounts by subcategory
         for ((subcategory, amountSpent) in spentByCategory) {
@@ -233,15 +233,18 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 true
             }
+
             R.id.budget_nav -> {
                 // Navigate to Budget Activity
-                startActivity(Intent(this,BudgetActivity::class.java))
+                startActivity(Intent(this, BudgetActivity::class.java))
                 true
             }
-            R.id.chart_nav-> {
-                startActivity(Intent(this,GraphicallyData::class.java))
+
+            R.id.chart_nav -> {
+                startActivity(Intent(this, GraphicallyData::class.java))
                 true
             }
+
             R.id.nav_login -> {
                 // Navigate to LoginActivity
                 startActivity(Intent(this, LoginActivity::class.java))

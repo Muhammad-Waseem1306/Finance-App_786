@@ -3,6 +3,7 @@ package com.example.financeapp.adapters
 import Budget
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
@@ -37,8 +38,10 @@ class BudgetAdapter(
         fun bind(budget: Budget) {
             dateTextView.text = "Date: ${budget.date}"
             categoryTextView.text = "Category: ${budget.category}"
-            amountTextView.text = "Amount: ${budget.limit}"
+            amountTextView.text = "Limit: ${budget.limit}"
+            amountTextView.setTextColor(Color.GREEN)
             spentTextView.text = "Spent: ${budget.spent}"
+            spentTextView.setTextColor(Color.RED)
             remainingTextView.text = "Remaining: ${budget.remaining}"
 
             // Handle card view click

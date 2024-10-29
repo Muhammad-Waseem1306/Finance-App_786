@@ -52,11 +52,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation (libs.play.services.auth)
+    implementation(libs.play.services.auth)
     // MPAndroidChart dependency
-    implementation (libs.mpandroidchart)
+    implementation(libs.mpandroidchart)
     implementation(libs.firebase.bom)
-    implementation(libs.google.firebase.auth)
+    implementation(
+        libs.google.firebase.auth
+    )
+
+    implementation(libs.firebase.messaging)
+    implementation(libs.androidx.core.ktx.v1101)
 
 
 }

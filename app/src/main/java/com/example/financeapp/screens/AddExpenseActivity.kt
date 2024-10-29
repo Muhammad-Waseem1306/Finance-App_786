@@ -100,22 +100,22 @@ class AddExpenseActivity : AppCompatActivity() {
     }
 
     private fun setupCategorySpinner() {
-        val categories = arrayOf("Income", "Expense")
+        val categories = arrayOf("--Select--","Income", "-------------------------Expense-------------------------", "Shopping", "Outing", "Food", "Travel", "Rent", "Other")
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = adapter
 
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when (categories[position]) {
-                    "Income" -> {
+                if (categories[position]=="Income") {
                         expenseSubcategorySpinner.visibility = View.GONE
                         customCategoryLayout.visibility = View.GONE
+                    if (categories[position]=="Other") {
+                        customCategoryLayout.visibility = View.VISIBLE
                     }
-                    "Expense" -> {
-                        expenseSubcategorySpinner.visibility = View.VISIBLE
-                        customCategoryLayout.visibility = View.GONE
-                    }
+                }else {
+                    expenseSubcategorySpinner.visibility = View.GONE
+                    customCategoryLayout.visibility = View.GONE
                 }
             }
 
@@ -176,13 +176,13 @@ class AddExpenseActivity : AppCompatActivity() {
                         if (category == "Income") {
                             expenseSubcategorySpinner.visibility = View.GONE
                             customCategoryLayout.visibility = View.GONE
-                        } else if (category == "Expense") {
-                            expenseSubcategorySpinner.visibility = View.VISIBLE
+                        } else if (category == "--Select--"|| category == "Shopping"||category == "Outing" ||category == "Food"||category ==  "Travel"||category == "Rent"||category == "Other") {
+                            expenseSubcategorySpinner.visibility = View.GONE
                             val subCategoryAdapter = binding.expenseSubcategorySpinner.adapter as ArrayAdapter<String>
                             val subCategoryPosition = subCategoryAdapter.getPosition(expense.subcategory)
                             binding.expenseSubcategorySpinner.setSelection(subCategoryPosition)
 
-                            if (expense.subcategory == "Other") {
+                            if (expense.category == "Other") {
                                 customCategoryLayout.visibility = View.VISIBLE
                                 customCategoryEditText.setText(expense.customText)
                             } else {
@@ -206,8 +206,8 @@ class AddExpenseActivity : AppCompatActivity() {
         val expenseData = hashMapOf(
             "amount" to amount,
             "category" to category,
-            "subcategory" to subcategory,
-            "customText" to customText,
+//            "subcategory" to category,
+            "customText" to category,
             "date" to date,
             "description" to description
         )
@@ -237,8 +237,8 @@ class AddExpenseActivity : AppCompatActivity() {
         val expenseData = hashMapOf(
             "amount" to amount,
             "category" to category,
-            "subcategory" to subcategory,
-            "customText" to customText,
+//            "subcategory" to category,
+            "customText" to category,
             "date" to date,
             "description" to description
         )
@@ -304,8 +304,8 @@ class AddExpenseActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.putString("amount", amount)
         editor.putString("category", category)
-        editor.putString("subcategory", subcategory)
-        editor.putString("customText", customText)
+//        editor.putString("subcategory", category)
+        editor.putString("customText", category)
         editor.putString("date", date)
         editor.putString("description", description)
         editor.apply()
